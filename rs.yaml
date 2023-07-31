@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: ReplicaSet	
+metadata:
+  labels:
+    app: myapprs
+  name: myapprs
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapprs-pod
+  template:
+    metadata:
+      labels:
+        app: myapprs-pod
+    spec:
+      containers:
+      - image: nginx:alpine
+        name: nginx
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: myapprs-svc
+  name: myapprs-svc
+spec:
+  ports:
+  - name: 80-80
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: myapprs-pod
+  type: NodePort
+
+
